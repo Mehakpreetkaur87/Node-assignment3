@@ -1,4 +1,7 @@
 import express from "express";
+import {userRoutes } from "./routers/userRouter.js"
+
+import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 
 const app = express();
 

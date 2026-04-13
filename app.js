@@ -1,52 +1,15 @@
 import express from "express";
 
 const app = express();
-app.use(express.json());
 
-let users = [];
+const PORT = 3000;
 
-app.post("/users", (req, res) => {
-  const { name, email } = req.body;
+app.use(express.json())
 
-  if (!name || !email) {
-    return res.status(400).send("Missing fields");
-  }
+app.use("/users", userRoutes);
 
-  const user = {
-    id: Date.now(),
-    name,
-    email,
-  };
+app.use(errorMiddleware);
 
-  users.push(user);
-
-  res.send(user);
+app.listen(3000, () =>{
+  console.log(`Server is running on ${PORT}`);
 });
-
-app.get("/users", (req, res) => {
-  res.send(users);
-});
-
-app.get("/users/:id", (req, res) => {
-  const user = users.find((u) => u.id == req.params.id);
-
-  if (!user) {
-    return res.status(404).send("User not found");
-  }
-
-  res.send(user);
-});
-
-app.delete("/users/:id", (req, res) => {
-  const index = users.findIndex((u) => u.id == req.params.id);
-
-  if (index === -1) {
-    return res.status(404).send("User not found");
-  }
-
-  users.splice(index, 1);
-
-  res.send("User deleted");
-});
-
-app.listen(3000, () => console.log("Server running"));
